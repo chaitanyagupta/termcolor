@@ -1,0 +1,14 @@
+termcolor
+=========
+
+Output terminal colors in Common Lisp.
+
+Usage
+-----
+
+> (load (compile-file "termcolor"))
+
+> (progn
+    (write-string (termcolor:color :cyan :bg :black :bright t))
+    (write-string "hello world")
+    nil)
