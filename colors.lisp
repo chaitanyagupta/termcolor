@@ -44,9 +44,17 @@
 
 (export (list 'get-color 'get-fg 'get-bg))
 
-(defun get-color (fg &key bg bright)
+(defun %get-color (fg bg bright)
   (format nil "~A[~A;~A~@[;~A~]m"
           +escape+
           (gethash (if bright :bright :dull) *fg-hash*)
           (gethash fg *fg-hash*)
           (and bg (gethash bg *bg-hash*))))
+
+(defun get-color (fg &key bg bright)
+  (%get-color fg bg bright))
+
+(define-compiler-macro get-color (&whole form fg &key bg bright)
+  (if (and (keywordp fg) (or (null bg) (keywordp bg)))
+      (%get-color fg bg bright)
+      form))
