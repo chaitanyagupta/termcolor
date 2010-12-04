@@ -1,10 +1,10 @@
 (cl:in-package #:cl-user)
 
-(cl:defpackage #:colors
+(cl:defpackage #:termcolor
   (:use #:cl)
   (:export #:color))
 
-(in-package #:colors)
+(in-package #:termcolor)
 
 (defvar *fg-hash* (make-hash-table :test #'equal))
 (defvar *bg-hash* (make-hash-table :test #'equal))
