@@ -13,7 +13,7 @@
   (let ((hash (ecase type
                 (:fg *fg-hash*)
                 (:bg *bg-hash*))))
-    (setf (gethash name hash) (format nil "~A" value))))
+    (setf (gethash name hash) value)))
 
 (defcolor :FG :DULL "0")
 (defcolor :FG :BRIGHT "1")
