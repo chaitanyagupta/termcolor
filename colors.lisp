@@ -43,11 +43,15 @@
 (defconstant +escape+ (code-char #o33))
 
 (defun %color (fg bg bright)
-  (format nil "~A[~A;~A~@[;~A~]m"
-          +escape+
-          (gethash (if bright :bright :dull) *fg-hash*)
-          (gethash fg *fg-hash*)
-          (and bg (gethash bg *bg-hash*))))
+  (let ((fg-code (gethash fg *fg-hash*))
+        (bg-code (gethash bg *bg-hash*)))
+    (assert fg-code () "Foreground color invalid: ~A" fg)
+    (when bg (assert bg-code () "Background color invalid: ~A" bg))
+    (format nil "~A[~A;~A~@[;~A~]m"
+            +escape+
+            (gethash (if bright :bright :dull) *fg-hash*)
+            fg-code
+            bg-code)))
 
 (defun color (fg &key bg bright)
   (%color fg bg bright))
