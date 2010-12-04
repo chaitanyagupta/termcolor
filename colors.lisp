@@ -5,12 +5,6 @@
 
 (in-package #:colors)
 
-#|(defmacro defcolor (name value)
-  (let ((symbol (intern (string name) :colors)))
-    `(progn
-       (export ',symbol :colors)
-       (defconstant ,symbol ,value))))|#
-
 (defvar *fg-hash* (make-hash-table :test #'equal))
 (defvar *bg-hash* (make-hash-table :test #'equal))
 
