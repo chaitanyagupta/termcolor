@@ -9,11 +9,11 @@
 (defvar *fg-hash* (make-hash-table :test #'equal))
 (defvar *bg-hash* (make-hash-table :test #'equal))
 
-(defmacro defcolor (type name value)
+(defun defcolor (type name value)
   (let ((hash (ecase type
-                (:fg '*fg-hash*)
-                (:bg '*bg-hash*))))
-    `(setf (gethash ,name ,hash) ,(format nil "~A" value))))
+                (:fg *fg-hash*)
+                (:bg *bg-hash*))))
+    (setf (gethash name hash) (format nil "~A" value))))
 
 (defcolor :FG :DULL "0")
 (defcolor :FG :BRIGHT "1")
