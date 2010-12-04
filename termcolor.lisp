@@ -1,5 +1,12 @@
 (cl:in-package #:cl-user)
 
+;; Usage:
+
+;; (progn
+;;   (write-string (termcolor:color :cyan :bg :black :bright t))
+;;   (write-string "hello world")
+;;   nil)
+
 (cl:defpackage #:termcolor
   (:use #:cl)
   (:export #:color))
