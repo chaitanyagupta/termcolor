@@ -55,32 +55,37 @@
           (get-color :fg fg)
           (get-color :bg bg)))
 
-(defun color (&key fg bg style stream)
-  (write-string (%color :fg fg :bg bg :style style) stream))
+(defun write-string* (string stream print)
+  (if (null print)
+      string
+      (write-string string stream)))
 
-(define-compiler-macro color (&whole form &key fg bg style stream)
+(defun color (&key fg bg style stream (print t))
+  (write-string* (%color :fg fg :bg bg :style style) stream print))
+
+(define-compiler-macro color (&whole form &key fg bg style stream (print t))
   (if (and (or (null fg) (keywordp fg))
            (or (null bg) (keywordp bg))
            (or (null style) (keywordp style)))
-      `(write-string ,(%color :fg fg :bg bg :style style) ,stream)
+      `(write-string* ,(%color :fg fg :bg bg :style style) ,stream ,print)
       form))
 
 (defmacro def-colorfn (type)
   (let ((type-keyword (intern (string type) :keyword)))
     `(progn
-       (defun ,type (name &key stream)
-         (write-string (%color ,type-keyword name) stream))
-       (define-compiler-macro ,type (&whole form name &key stream)
+       (defun ,type (name &key stream (print t))
+         (write-string* (%color ,type-keyword name) stream print))
+       (define-compiler-macro ,type (&whole form name &key stream (print t))
          (if (keywordp name)
-             `(write-string ,(%color ,type-keyword name) ,stream)
+             `(write-string* ,(%color ,type-keyword name) ,stream ,print)
              form)))))
 
 (def-colorfn fg)
 (def-colorfn bg)
 (def-colorfn style)
 
-(defun reset (&optional stream)
-  (write-string (%color :style :reset) stream))
+(defun reset (&key stream (print t))
+  (write-string* (%color :style :reset) stream print))
 
-(define-compiler-macro reset (&optional stream)
-  `(write-string ,(%color :style :reset) ,stream))
+(define-compiler-macro reset (&key stream (print t))
+  `(write-string* ,(%color :style :reset) ,stream ,print))
