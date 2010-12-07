@@ -49,11 +49,11 @@
 (defun %color (&key fg bg style)
   (assert (or fg bg style) (fg bg style)
           "None of FG, BG or STYLE given.")
-  (format nil "~A[~@[~A~]~@[;~A~]~@[;~A~]m"
+  (format nil "~A[~{~@[~A~^;~]~}m"
           +escape+
-          (get-color :style style)
-          (get-color :fg fg)
-          (get-color :bg bg)))
+          (remove-if #'null (list (get-color :style style)
+                                  (get-color :fg fg)
+                                  (get-color :bg bg)))))
 
 (defun write-string* (string stream print)
   (if (null print)
