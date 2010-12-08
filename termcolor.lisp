@@ -46,14 +46,15 @@
   (or (gethash name (getf *hashes* type))
       (when name (error "Invalid color ~A: ~A" type name))))
 
-(defun %color (&key fg bg style)
-  (assert (or fg bg style) (fg bg style)
-          "None of FG, BG or STYLE given.")
+(defun %color (&key fg bg style number)
+  (assert (or fg bg style number) (fg bg style number)
+          "%COLOR: Atleast one of the keyword args is required.")
   (format nil "~A[~{~@[~A~^;~]~}m"
           +escape+
           (remove-if #'null (list (get-color :style style)
                                   (get-color :fg fg)
-                                  (get-color :bg bg)))))
+                                  (get-color :bg bg)
+                                  number))))
 
 (defun write-string* (string stream print)
   (if (null print)
@@ -85,7 +86,7 @@
 (def-colorfn style)
 
 (defun reset (&key stream (print t))
-  (write-string* (%color :style :reset-all) stream print))
+  (write-string* (%color :number 0) stream print))
 
 (define-compiler-macro reset (&key stream (print t))
-  `(write-string* ,(%color :style :reset-all) ,stream ,print))
+  `(write-string* ,(%color :number 0) ,stream ,print))
