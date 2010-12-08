@@ -2,7 +2,7 @@
 
 (cl:defpackage #:termcolor
   (:use #:cl)
-  (:export #:color #:fg #:bg #:style #:reset))
+  (:export #:color #:fg #:bg #:style #:reset #:raw))
 
 (in-package #:termcolor)
 
@@ -90,3 +90,6 @@
 
 (define-compiler-macro reset (&key stream (print t))
   `(write-string* ,(%color :number 0) ,stream ,print))
+
+(defun raw (number &key stream (print t))
+  (write-string* (%color :number number) stream print))
