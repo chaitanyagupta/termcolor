@@ -75,11 +75,12 @@
       (%%color :fg fg :bg bg :style style :number number)
       form))
 
-(defvar *colorize* t)
+(defvar *colorize* :infer)
 
 (defun colorizep (stream)
-  (or (eq *colorize* :force)
-      (and *colorize* (interactive-stream-p (find-stream stream)))))
+  (or (eq *colorize* t)
+      (and (eq *colorize* :infer)
+           (interactive-stream-p (find-stream stream)))))
 
 (defun write-color-string (string stream print)
   (cond ((null print) string)
